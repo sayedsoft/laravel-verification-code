@@ -17,6 +17,8 @@ class VerificationCode extends Model
         'code',
         'verifiable',
         'expires_at',
+        'verify_type',
+        'related_id'
     ];
 
     /**
