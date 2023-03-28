@@ -107,7 +107,7 @@ class VerificationCode extends Model
         return $query->where('verifiable', $verifiable);
     }
     
-    public function scopeWith($query,string $type = 'register', string $related_id = null)
+    public function scopeaWithType($query,string $type = 'register', string $related_id = null)
     {
         return $query->where('verify_type', $type)->where('related_id',$related_id);
     }
