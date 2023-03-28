@@ -83,11 +83,12 @@ class VerificationCode extends Model
      *
      * @return string
      */
-    public static function createFor(string $verifiable)
+    public static function createFor(string $verifiable,string $type = 'register', string $related_id = null)
     {
         self::create([
             'code' => $code = app(CodeGenerator::class)->generate(),
-            'verifiable' => $verifiable,
+            'verify_type' => $type,
+            'related_id' => $related_id,
         ]);
 
         return $code;
@@ -104,6 +105,11 @@ class VerificationCode extends Model
     public function scopeFor($query, string $verifiable)
     {
         return $query->where('verifiable', $verifiable);
+    }
+    
+    public function scopeWith($query,string $type = 'register', string $related_id = null)
+    {
+        return $query->where('verify_type', $type)->where('related_id',$related_id);
     }
 
     /**
