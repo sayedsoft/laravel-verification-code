@@ -17,6 +17,8 @@ class CreateVerificationCodesTable extends Migration
             $table->bigIncrements('id');
             $table->string('code');
             $table->string('verifiable');
+            $table->string('verify_type');
+            $table->string('related_id');
             $table->timestamp('expires_at');
             $table->timestamps();
         });
