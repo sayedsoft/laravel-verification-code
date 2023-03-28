@@ -20,12 +20,12 @@ class VerificationCodeManager
      *
      * @return void
      */
-    public function send(string $verifiable, string $channel = 'mail')
+    public function send(string $verifiable,string $type = 'register', string $related_id = null ,string $channel = 'mail')
     {
         if ($this->isTestVerifiable($verifiable)) {
             return;
         }
-
+    
         $code = VerificationCode::createFor($verifiable);
 
         $notificationClass = $this->getNotificationClass();
@@ -47,19 +47,22 @@ class VerificationCodeManager
      *
      * @return bool
      */
-    public function verify(string $code, string $verifiable, bool $deleteAfterVerification = true)
+    public function verify(string $code, string $verifiable, string $type = 'register', string $related_id = null, bool $deleteAfterVerification = true)
     {
         if ($this->isTestVerifiable($verifiable)) {
             return $this->isTestCode($code);
         }
-
+    
         $codeIsValid = VerificationCode::query()
             ->for($verifiable)
+            ->whithType($type,$related_id)
             ->notExpired()
-            ->cursor()
-            ->contains(function ($verificationCode) use ($code) {
+             ->cursor()
+         ->contains(function ($verificationCode) use ($code) {
                 return Hash::check($code, $verificationCode->code);
-            });
+        });
+        
+           
 
         if (! $codeIsValid) {
             return false;
